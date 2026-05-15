@@ -3,6 +3,7 @@ import datetime
 import logging
 import math
 from typing import Any, TypeAlias
+import uuid
 from google.cloud import bigquery
 import requests
 import retry
@@ -342,7 +343,11 @@ def upload_to_bigquery(
     return
 
   target_table_id = f"{bq_dataset}.{bq_table}"
-  staging_table_id = f"{target_table_id}_staging"
+
+  # Create a unique staging table ID to avoid conflict with concurrently running
+  # scripts.
+  unique_id = uuid.uuid4().hex
+  staging_table_id = f"{target_table_id}_staging_{unique_id}"
 
   records = [dataclasses.asdict(record) for record in llvm_data]
   fields = [field for field in records[0].keys()]
