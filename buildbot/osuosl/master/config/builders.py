@@ -3891,4 +3891,19 @@ all += [
                     ]
                 )
         },
+        {'name': "nvhpc-flang-x86_64-linux",
+         'tags': ["flang", "x86_64", "linux"],
+         'collapseRequests': False,
+         'workernames': ["nvhpc-x86_64-worker1", "nvhpc-x86_64-worker2"],
+         'builddir': "flang-x86_64-linux",
+         'factory': UnifiedTreeBuilder.getCmakeWithNinjaBuildFactory(
+             clean=True,
+             depends_on_projects=['llvm', 'mlir', 'flang', 'clang'],
+             checks=[
+                 "check-llvm",
+                 "check-mlir",
+                 "check-flang"
+             ],
+         )
+        },
 ]
